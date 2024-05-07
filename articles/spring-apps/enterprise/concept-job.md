@@ -24,21 +24,29 @@ ms.custom: devx-track-java, devx-track-extended-java
 
 ## Job execution
 
-Each run of the job is a job execution. The job execution carries the properties of the corresponding job and serves as a dynamic instance. A common lifecycle of a job execution is from `pending`, `running` to termination status `completed` or `failed` depeding on whether the execution finishes successfully or not.
+A job execution refers to the process of running a particular task or set of tasks defined within a job. It encompasses the entire lifecycle of executing those tasks, including initializing, processing, and completing the job according to its specifications.
+
+A common lifecycle of a job execution in Azure Spring Apps is from `pending`, `running` to termination status `completed` or `failed` depeding on whether the execution finishes successfully or not.
+
+Each time the job is executed, it adopts its preset configuration from the job, with certain aspects allowing for customization to accommodate different runs.
+
+In non-parallel job execution, only one instance runs at a time, whereas in parallel execution, multiple instances can run simultaneously.
 
 ## Configuration
 
-Job defines the default configuration that is used for each job execution, such as the source of user application and the trigger configuration.
+The job establishes the default configuration utilized for each execution, encompassing elements like the user application source and trigger configuration. Each execution of the job inherits the configuration, allowing certain parameters to be overridden with new values for individual executions.
 
 ### Trigger configuration
 
-Job is only supported to be triggered manually for public preview. More trigger types will be supported later.
+Belows are the trigger configuration of the Job.
 
+- **Trigger type**: Job is only supported to be triggered manually for public preview. More trigger types will be supported later.
 - **Parallelism**: The count of instances of the job which executes in the same time. The default value is 1. For parallel job, you can get the index of each instance through `JOB_COMPLETION_INDEX` environment variable.
 - **Retry limit**: The maximum number of a job attempts to execution after encountering a failure or error. The default value is 0 which means the job does not retry if it fails.
 - **Timeout**: The maximum time in seconds when the job failed. You can leave it unset or set the value 0 which means the job has no timeout.
 
 ### Arguments and environment variables
+
 You can specify arguments and environment variables both in Job level and execution level. The value of arguments specified for the execution override that of the job.
 
 The environment variables consist of key and value. You can specify the value in secret environment variable for secret values. The environment variables specified in job level are default values for each execution, the environment variables specified in execution level has higher priority. You can specify part of those environment variables when start an execution to override the value in job level.
